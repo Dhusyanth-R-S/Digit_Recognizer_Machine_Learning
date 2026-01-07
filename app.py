@@ -59,10 +59,24 @@ if not st.session_state.show_canvas:
 
 else:
     if st.session_state.prediction is not None:
-        st.markdown(
-            f"<h1 style='text-align:center;'>{st.session_state.prediction}</h1>",
-            unsafe_allow_html=True
-        )
+        if isinstance(st.session_state.prediction, int):
+            st.markdown(
+                f"""
+                <div style="text-align:center;
+                            font-size:48px;
+                            font-weight:800;
+                            color:#2ecc71;">
+                    You drew: {st.session_state.prediction}
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+        else:
+            st.markdown(
+                f"<h2 style='text-align:center;color:#f39c12;'>{st.session_state.prediction}</h2>",
+                unsafe_allow_html=True
+            )
+
 
     canvas = st_canvas(
         fill_color="rgba(255,255,255,1)",
