@@ -96,7 +96,7 @@ with right:
             st.markdown('<div class="predict-btn">', unsafe_allow_html=True)
             if st.button("Predict"):
                 if canvas.image_data is not None:
-                    img = canvas.image_data[:, :, 0]
+                    img = canvas.image_data[:, :, 3]
                     img = Image.fromarray(img).resize((28, 28))
                     img = np.array(img)
                     img = img / 255.0
