@@ -50,11 +50,19 @@ st.markdown("""
 div.stButton > button:first-child:contains("Predict") {
     background-color: #2ecc71 !important;
     color: white !important;
-    font-size: 24px !important;
+    font-size: 26px !important;
     padding: 15px 45px !important;
     font-weight: 800 !important;
     border: none !important;
     width: 100% !important;
+}
+
+.prediction-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 280px; 
 }
 </style>
 """, unsafe_allow_html=True)
@@ -71,35 +79,41 @@ if not st.session_state.show_canvas:
     st.markdown("</div>", unsafe_allow_html=True)
 
 else:
-    if st.session_state.prediction is not None:
-        if isinstance(st.session_state.prediction, (int, np.integer)):
-            st.markdown(
-                f"""
-                <div style="text-align:center; color:#4b4b4b; font-size:24px; font-weight:700; margin-bottom: 10px;">
-                    You drew: 
-                    <span style="font-size:60px; font-weight:900; color:#2ecc71; display:block;">
-                        {st.session_state.prediction}
-                    </span>
-                </div>
-                """, 
-                unsafe_allow_html=True
-            )
-        else:
-            st.markdown(
-                f"<h2 style='text-align:center;color:#f39c12;'>{st.session_state.prediction}</h2>",
-                unsafe_allow_html=True
-            )
+    main_col1, main_col2 = st.columns([1, 1])
 
-    canvas = st_canvas(
-        fill_color="rgba(255,255,255,1)",
-        stroke_width=20,
-        stroke_color="#FFFFFF",
-        background_color="#000000",
-        width=280,
-        height=280,
-        drawing_mode="freedraw",
-        key=st.session_state.canvas_key
-    )
+    with main_col1:
+        canvas = st_canvas(
+            fill_color="rgba(255,255,255,1)",
+            stroke_width=20,
+            stroke_color="#FFFFFF",
+            background_color="#000000",
+            width=280,
+            height=280,
+            drawing_mode="freedraw",
+            key=st.session_state.canvas_key
+        )
+
+    with main_col2:
+        st.markdown('<div class="prediction-box">', unsafe_allow_html=True)
+        if st.session_state.prediction is not None:
+            if isinstance(st.session_state.prediction, (int, np.integer)):
+                st.markdown(
+                    f"""
+                    <div style="text-align:center; color:#4b4b4b; font-size:24px; font-weight:700;">
+                        You drew: 
+                        <span style="font-size:100px; font-weight:900; color:#2ecc71; display:block; line-height:1;">
+                            {st.session_state.prediction}
+                        </span>
+                    </div>
+                    """, 
+                    unsafe_allow_html=True
+                )
+            else:
+                st.markdown(
+                    f"<h2 style='text-align:center;color:#f39c12;'>{st.session_state.prediction}</h2>",
+                    unsafe_allow_html=True
+                )
+        st.markdown('</div>', unsafe_allow_html=True)
 
     col_empty, col_predict = st.columns([1.5, 1])
     with col_predict:
