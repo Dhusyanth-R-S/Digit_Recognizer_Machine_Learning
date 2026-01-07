@@ -58,6 +58,10 @@ Although notebook metrics improved significantly after retraining, the most impo
 - Reduced redraw prompts
 - Improved handling of messy or imperfect digits
 
+### Checkout the app here 
+
+https://digitrecognizer-by-dhusya.streamlit.app/
+
 ---
 
 # 👤 Author
@@ -74,3 +78,4 @@ This project reflects my approach to machine learning:
 - validating performance through real usage, not just metrics
 
 I enjoy working with Python, SQL, and ML libraries, and I am actively building projects that demonstrate end-to-end ownership — from data collection to deployment.
+
