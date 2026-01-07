@@ -91,15 +91,14 @@ with right:
                 st.session_state.prediction = None
                 st.rerun()
             st.markdown('</div>', unsafe_allow_html=True)
-
         with c2:
             st.markdown('<div class="predict-btn">', unsafe_allow_html=True)
             if st.button("Predict"):
                 if canvas.image_data is not None:
                     img = canvas.image_data[:, :, 3]
                     img = Image.fromarray(img).resize((28, 28))
-                    img = np.array(img)
-                    img = img / 255.0
+                    img = np.array(img).astype(np.float32)
+                    img = 255.0 - img
                     img = img.reshape(1, -1)
                     pred = model.predict(img)[0]
                     st.session_state.prediction = int(pred)
