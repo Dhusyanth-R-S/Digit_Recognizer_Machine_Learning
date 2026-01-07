@@ -1,57 +1,76 @@
-# ✍️ Handwritten Digit Recognizer  
-### Classical Machine Learning • Streamlit Deployment
- 
-Users can draw digits on an interactive canvas and receive **real-time predictions**.
+# ✍️ Handwritten Digit Recognizer (Classical Machine Learning)
+
+This project is a handwritten digit recognition system built using **classical machine learning**, designed to work reliably with **real user drawings from a Streamlit canvas**.
+
+The goal of this project is not just high notebook accuracy, but **stable, trustworthy behavior after deployment**.
 
 ---
 
-## 🚀 Project Overview
+# 🚩 Problem Statement
 
-This project demonstrates a complete **end-to-end ML workflow** — from model training to live deployment — using a **Logistic Regression classifier** wrapped inside a **Scikit-learn Pipeline**.
+During initial development, the model performed well during training but struggled when deployed.
 
-Instead of deep learning, this project intentionally uses **classical ML** to highlight:
-- strong fundamentals  
-- preprocessing correctness  
-- deployment reliability  
-- CPU-efficient inference  
+The core issue was **data mismatch**:
+- Training data did not reflect how users actually draw digits
+- Notebook accuracy did not translate to real-world performance
+- Predictions were often low-confidence or unstable
 
----
-
-## ⭐ Key Features & Speciality
-
-- ✅ **Classical ML (Logistic Regression)** — fast, lightweight, interpretable  
-- ✅ **Pipeline-based architecture** (StandardScaler + model)  
-- ✅ Prevents **training–inference preprocessing mismatch**  
-- ✅ **Interactive drawing canvas** for user input  
-- ✅ Clean UI with **instant predict & clear** (no page reloads)  
-- ✅ Carefully aligned **stroke width, resolution, and normalization**  
-- ✅ Deployed directly on **Streamlit Cloud** (no Docker / backend)
+This is a common challenge in applied machine learning systems.
 
 ---
 
-## 🧠 Model Details
+# 🧠 Approach & Solution
 
-- **Algorithm:** Logistic Regression (multiclass)
-- **Framework:** Scikit-learn
-- **Input Shape:** 28 × 28 grayscale image
-- **Features:** 784 flattened pixel values
-- **Preprocessing:**
-  - Resize to 28×28  
-  - Pixel normalization  
-  - Standard scaling handled inside the pipeline  
+Instead of switching to deep learning, the focus was placed on fixing the **data pipeline and real-world alignment**.
 
----
+## Key steps taken
 
-## 🖥️ Tech Stack
+- Built a Streamlit-based digit recognition app
+- Generated Streamlit-style synthetic data aligned with deployment input
+- Created a separate Streamlit app to collect real handwritten digit samples
+- Collected real user drawings in multiple styles
+- Retrained the model using combined synthetic and real data
+- Added a confidence-based safeguard for uncertain predictions
 
-- **Python**
-- **NumPy**
-- **Scikit-learn**
-- **Streamlit**
-- **streamlit-drawable-canvas**
-- **Joblib**
+This approach significantly improved real-time reliability.
 
 ---
 
-## 📂 Project Structure
+# ⚙️ Model Details
 
+- Algorithm: Logistic Regression (LogisticRegressionCV)
+- Type: Classical Machine Learning
+- Input: 28×28 grayscale images (flattened to 784 features)
+- Output: Digit prediction (0–9) with confidence score
+- Inference: Real-time prediction via Streamlit
+- UX Safeguard: Prompts the user to redraw when confidence is low
+
+This keeps the system fast, interpretable, and lightweight.
+
+---
+
+# 📊 Results (Practical Evaluation)
+
+Although notebook metrics improved significantly after retraining, the most important gains were observed in real usage:
+
+- Fewer incorrect predictions
+- More stable confidence scores
+- Reduced redraw prompts
+- Improved handling of messy or imperfect digits
+
+---
+
+# 👤 Author
+
+**Dhusyanth R S**
+
+I am a data science learner with a strong interest in **classical machine learning, data analysis, and real-world problem solving**.  
+I focus on building projects that go beyond notebook accuracy and instead work reliably in **practical, deployed environments**.
+
+This project reflects my approach to machine learning:
+- understanding data–model mismatch
+- iterating through better data rather than blindly changing models
+- designing simple, interpretable solutions
+- validating performance through real usage, not just metrics
+
+I enjoy working with Python, SQL, and ML libraries, and I am actively building projects that demonstrate end-to-end ownership — from data collection to deployment.

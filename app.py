@@ -12,7 +12,7 @@ st.set_page_config(
 
 @st.cache_resource
 def load_model():
-    return joblib.load("digit_logreg_pipeline.pkl")
+    return joblib.load("digit_lr_model.pkl")
 
 model = load_model()
 
