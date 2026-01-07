@@ -62,15 +62,26 @@ div.stButton > button:first-child:contains("Predict") {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 300px; 
+    height: 280px; 
 }
 
 .instruction-text {
     text-align: center;
     font-size: 20px;
     font-weight: 600;
-    color: #34495e;
+    color: #4b4b4b;
     margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+    [data-testid="stHorizontalBlock"] {
+        display: flex !important;
+        flex-direction: column-reverse !important;
+    }
+    .prediction-box {
+        height: auto !important;
+        margin-bottom: 20px;
+    }
 }
 </style>
 """, unsafe_allow_html=True)
@@ -89,9 +100,9 @@ if not st.session_state.show_canvas:
 else:
     st.markdown('<div class="instruction-text">Try drawing any number between 0 - 9 below!</div>', unsafe_allow_html=True)
     
-    main_col1, main_col2 = st.columns([1, 1])
+    col_left, col_right = st.columns([1, 1])
 
-    with main_col1:
+    with col_left:
         canvas = st_canvas(
             fill_color="rgba(255,255,255,1)",
             stroke_width=20,
@@ -103,7 +114,7 @@ else:
             key=st.session_state.canvas_key
         )
 
-    with main_col2:
+    with col_right:
         st.markdown('<div class="prediction-box">', unsafe_allow_html=True)
         if st.session_state.prediction is not None:
             if isinstance(st.session_state.prediction, (int, np.integer)):
@@ -125,18 +136,16 @@ else:
                 )
         st.markdown('</div>', unsafe_allow_html=True)
 
-    col_empty, col_predict = st.columns([1.5, 1])
-    with col_predict:
+    c1, c2 = st.columns([1.5, 1])
+    with c2:
         if st.button("Predict"):
             if canvas.image_data is not None:
                 img = canvas.image_data[:, :, :3].mean(axis=2).astype(np.uint8)
                 digit_28 = Image.fromarray(img).resize((28, 28), resample=Image.BILINEAR)
                 X = np.array(digit_28, dtype=np.uint8).reshape(1, -1)
-
                 probs = model.predict_proba(X)[0]
                 best_prob = probs.max()
                 pred = probs.argmax()
-
                 if best_prob < 0.5:
                     st.session_state.prediction = "Please redraw"
                 else:
