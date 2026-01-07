@@ -36,11 +36,11 @@ st.markdown("""
 .draw-text {
     font-size: 22px;
     margin-bottom: 25px;
-    color: white;
+    color: #4b4b4b; /* Neutral gray for light/dark mode */
+    font-weight: 600;
 }
 
-/* 2. Target ONLY the DRAW button using a specific div class */
-/* This prevents the Clear/Predict buttons from changing */
+/* Big DRAW button styling */
 .draw-container div.stButton > button {
     width: 180px !important;
     height: 180px !important;
@@ -52,12 +52,21 @@ st.markdown("""
     border: none !important;
 }
 
-/* 3. Normal buttons for the canvas page (just in case) */
-[data-testid="stHorizontalBlock"] button {
-    width: auto !important;
-    height: auto !important;
-    border-radius: 4px !important;
-    font-size: 16px !important;
+/* 2. Canvas Page - Predict Button Styling */
+/* We target the button with the label 'Predict' */
+div[data-testid="stVerticalBlock"] div.stButton > button:first-child:contains("Predict") {
+    background-color: #2ecc71 !important;
+    color: white !important;
+    font-size: 20px !important;
+    padding: 10px 30px !important;
+    font-weight: 700 !important;
+    border: none !important;
+}
+
+/* Align Predict button to the right */
+.predict-col {
+    display: flex;
+    justify-content: flex-end;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -76,14 +85,14 @@ if not st.session_state.show_canvas:
 
 # --- SECOND PAGE (Canvas & Prediction) ---
 else:
-    # Display Prediction Result
+    # Display Prediction Result (Color updated for visibility)
     if st.session_state.prediction is not None:
         if isinstance(st.session_state.prediction, (int, np.integer)):
             st.markdown(
                 f"""
-                <div style="text-align:center; color:white; font-size:24px; margin-bottom: 10px;">
+                <div style="text-align:center; color:#4b4b4b; font-size:24px; font-weight:700; margin-bottom: 10px;">
                     You drew: 
-                    <span style="font-size:55px; font-weight:900; color:#2ecc71; display:block;">
+                    <span style="font-size:60px; font-weight:900; color:#2ecc71; display:block;">
                         {st.session_state.prediction}
                     </span>
                 </div>
@@ -99,7 +108,7 @@ else:
     # Drawing Canvas
     canvas = st_canvas(
         fill_color="rgba(255,255,255,1)",
-        stroke_width=18,
+        stroke_width=20,
         stroke_color="#FFFFFF",
         background_color="#000000",
         width=280,
@@ -108,16 +117,11 @@ else:
         key=st.session_state.canvas_key
     )
 
-    c1, c2 = st.columns(2)
-
-    with c1:
-        if st.button("Clear", use_container_width=True):
-            st.session_state.canvas_key = f"canvas_{np.random.randint(1_000_000)}"
-            st.session_state.prediction = None
-            st.rerun()
-
-    with c2:
-        if st.button("Predict", use_container_width=True):
+    # Layout for Predict (Right-aligned) and Clear (Standard)
+    # First Row: Predict on the right
+    col_empty, col_predict = st.columns([2, 1])
+    with col_predict:
+        if st.button("Predict"):
             if canvas.image_data is not None:
                 img = canvas.image_data[:, :, :3].mean(axis=2).astype(np.uint8)
                 digit_28 = Image.fromarray(img).resize((28, 28), resample=Image.BILINEAR)
@@ -127,8 +131,14 @@ else:
                 best_prob = probs.max()
                 pred = probs.argmax()
 
-                if best_prob < 0.6:
+                if best_prob < 0.5:
                     st.session_state.prediction = "Please redraw"
                 else:
                     st.session_state.prediction = int(pred)
                 st.rerun()
+
+    # Second Row: Clear button as it was
+    if st.button("Clear"):
+        st.session_state.canvas_key = f"canvas_{np.random.randint(1_000_000)}"
+        st.session_state.prediction = None
+        st.rerun()
