@@ -25,50 +25,42 @@ body {
     background-color: #0e1117;
 }
 
-.top-hint {
+.hint {
     text-align: center;
     font-size: 18px;
     color: #cfcfcf;
-    margin-bottom: 18px;
+    margin-bottom: 20px;
 }
 
-.draw-circle {
+.draw-wrap {
     display: flex;
     justify-content: center;
 }
-.draw-circle button {
-    width: 160px;
-    height: 160px;
+
+.draw-wrap button {
+    width: 180px;
+    height: 180px;
     border-radius: 50%;
-    font-size: 26px !important;
-    font-weight: 700;
+    font-size: 30px !important;
+    font-weight: 800;
 }
 
 .prediction {
-    font-size: 72px;
-    font-weight: 800;
+    font-size: 80px;
+    font-weight: 900;
     color: #2ecc71;
-    text-align: center;
-    animation: slide 0.5s ease-out;
+    animation: pop 0.4s ease-out;
 }
 
-@keyframes slide {
-    0% { transform: translateY(-20px); opacity: 0; }
-    100% { transform: translateY(0); opacity: 1; }
+@keyframes pop {
+    from { transform: translateY(-15px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
 }
 
 .warning {
     font-size: 28px;
     font-weight: 700;
     color: #f39c12;
-    text-align: center;
-}
-
-.button-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
 }
 
 .clear-btn button {
@@ -78,42 +70,41 @@ body {
 }
 
 .predict-btn button {
-    height: 70px;
+    height: 78px;
     width: 100%;
-    font-size: 26px !important;
-    font-weight: 800;
+    font-size: 28px !important;
+    font-weight: 900;
     background-color: #7bed9f !important;
-    color: #000000 !important;
+    color: #000 !important;
 }
 
 @media (min-width: 768px) {
-    .layout {
+    .desktop-layout {
         display: flex;
         gap: 40px;
         align-items: center;
     }
     .prediction {
-        text-align: left;
-        font-size: 88px;
+        font-size: 96px;
     }
 }
 </style>
 """, unsafe_allow_html=True)
 
 if not st.session_state.show_canvas:
-    st.markdown("<div class='top-hint'>Click draw to make me recognize what you draw!</div>", unsafe_allow_html=True)
-    st.markdown("<div class='draw-circle'>", unsafe_allow_html=True)
+    st.markdown("<div class='hint'>Click draw to make me recognize what you draw!</div>", unsafe_allow_html=True)
+    st.markdown("<div class='draw-wrap'>", unsafe_allow_html=True)
     if st.button("DRAW"):
         st.session_state.show_canvas = True
         st.rerun()
     st.markdown("</div>", unsafe_allow_html=True)
 
 else:
-    st.markdown("<div class='layout'>", unsafe_allow_html=True)
+    st.markdown("<div class='desktop-layout'>", unsafe_allow_html=True)
 
-    left, right = st.columns([1, 1])
+    col1, col2 = st.columns([1, 1])
 
-    with left:
+    with col1:
         if st.session_state.prediction is not None:
             if isinstance(st.session_state.prediction, int):
                 st.markdown(f"<div class='prediction'>{st.session_state.prediction}</div>", unsafe_allow_html=True)
@@ -133,13 +124,18 @@ else:
             key=st.session_state.canvas_key
         )
 
-        c1, c2 = st.columns([1, 3])
-        with c1:
+        b1, b2 = st.columns([1, 3])
+
+        with b1:
+            st.markdown("<div class='clear-btn'>", unsafe_allow_html=True)
             if st.button("Clear"):
                 st.session_state.canvas_key = f"canvas_{np.random.randint(1_000_000)}"
                 st.session_state.prediction = None
                 st.rerun()
-        with c2:
+            st.markdown("</div>", unsafe_allow_html=True)
+
+        with b2:
+            st.markdown("<div class='predict-btn'>", unsafe_allow_html=True)
             if st.button("Predict"):
                 if canvas.image_data is None:
                     st.stop()
@@ -154,8 +150,10 @@ else:
                 else:
                     st.session_state.prediction = int(pred)
                 st.rerun()
+            st.markdown("</div>", unsafe_allow_html=True)
 
-    with right:
-        pass
+    with col2:
+        if st.session_state.prediction is not None and isinstance(st.session_state.prediction, int):
+            st.markdown(f"<div class='prediction'>{st.session_state.prediction}</div>", unsafe_allow_html=True)
 
     st.markdown("</div>", unsafe_allow_html=True)
