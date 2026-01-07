@@ -62,7 +62,15 @@ div.stButton > button:first-child:contains("Predict") {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 280px; 
+    height: 300px; 
+}
+
+.instruction-text {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+    color: #34495e;
+    margin-bottom: 20px;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -79,6 +87,8 @@ if not st.session_state.show_canvas:
     st.markdown("</div>", unsafe_allow_html=True)
 
 else:
+    st.markdown('<div class="instruction-text">Try drawing any number between 0 - 9 below!</div>', unsafe_allow_html=True)
+    
     main_col1, main_col2 = st.columns([1, 1])
 
     with main_col1:
@@ -99,9 +109,9 @@ else:
             if isinstance(st.session_state.prediction, (int, np.integer)):
                 st.markdown(
                     f"""
-                    <div style="text-align:center; color:#4b4b4b; font-size:24px; font-weight:700;">
-                        You drew: 
-                        <span style="font-size:110px; font-weight:900; color:#2ecc71; display:block; line-height:1;">
+                    <div style="text-align:center; color:#4b4b4b; line-height:1;">
+                        <p style="font-size:22px; font-weight:700; margin:0;">You drew:</p>
+                        <span style="font-size:160px; font-weight:900; color:#2ecc71; display:block;">
                             {st.session_state.prediction}
                         </span>
                     </div>
@@ -110,7 +120,7 @@ else:
                 )
             else:
                 st.markdown(
-                    f"<h2 style='text-align:center;color:#f39c12;'>{st.session_state.prediction}</h2>",
+                    f"<h2 style='text-align:center;color:#f39c12; font-size:30px;'>{st.session_state.prediction}</h2>",
                     unsafe_allow_html=True
                 )
         st.markdown('</div>', unsafe_allow_html=True)
