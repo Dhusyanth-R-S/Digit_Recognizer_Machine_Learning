@@ -69,7 +69,6 @@ Although notebook metrics improved significantly after retraining, the most impo
 **Dhusyanth R S**
 
 I am a data science learner with a strong interest in **classical machine learning, data analysis, and real-world problem solving**.  
-I focus on building projects that go beyond notebook accuracy and instead work reliably in **practical, deployed environments**.
 
 This project reflects my approach to machine learning:
 - understanding data–model mismatch
